@@ -18,7 +18,7 @@ function GrammarTools() {
       description: 'Build perfect sentences with drag-and-drop word blocks',
       icon: '🏗️',
       color: 'from-purple-500 to-pink-500',
-      link: '/sentence-builder'
+      link: '/grammar/sentence-builder'
     },
     {
       id: 3,

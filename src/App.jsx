@@ -31,6 +31,7 @@ function App() {
             <Route path="/grammar-tools" element={<GrammarTools />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/verbs-tenses" element={<VerbsTenses />} />
+            <Route path="/grammar/sentence-builder" element={<SentenceBuilder />} />
             <Route path="/sentence-builder" element={<SentenceBuilder />} />
             <Route path="/conjunctions" element={<Conjunctions />} />
           </Routes>
