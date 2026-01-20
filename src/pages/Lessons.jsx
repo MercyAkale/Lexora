@@ -1,9 +1,13 @@
+import { useNavigate } from 'react-router-dom';
+
 function Lessons() {
+  const navigate = useNavigate();
+
   const lessons = [
-    { id: 1, title: 'Basic Vocabulary', level: 'Beginner', progress: 75 },
-    { id: 2, title: 'Common Phrases', level: 'Beginner', progress: 50 },
-    { id: 3, title: 'Verb Conjugation', level: 'Intermediate', progress: 30 },
-    { id: 4, title: 'Advanced Grammar', level: 'Advanced', progress: 0 },
+    { id: 1, title: 'Basic Vocabulary', level: 'Beginner', progress: 75, path: '/lessons/basic-vocab' },
+    { id: 2, title: 'Common Phrases', level: 'Beginner', progress: 50, path: '/lessons/common-phrases' },
+    { id: 3, title: 'Verb Conjugation', level: 'Intermediate', progress: 30, path: '/lessons/verb-conjugation' },
+    { id: 4, title: 'Advanced Grammar', level: 'Advanced', progress: 0, path: '/lessons/advanced-grammar' },
   ];
 
   return (
@@ -36,7 +40,10 @@ function Lessons() {
                 </div>
               </div>
               
-              <button className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition">
+              <button 
+                onClick={() => navigate(lesson.path)}
+                className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition"
+              >
                 {lesson.progress > 0 ? 'Continue' : 'Start Lesson'}
               </button>
             </div>
