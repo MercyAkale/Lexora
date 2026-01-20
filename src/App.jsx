@@ -9,6 +9,10 @@ import Profile from './pages/Profile';
 import VerbsTenses from './pages/VerbsTenses';
 import SentenceBuilder from './pages/SentenceBuilder';
 import Conjunctions from './pages/Conjunctions';
+import BasicVocab from './pages/BasicVocab';
+import CommonPhrases from './pages/CommonPhrases';
+import VerbConjugation from './pages/VerbConjugation';
+import AdvancedGrammar from './pages/AdvancedGrammar';
 
 function App() {
   return (
@@ -19,6 +23,10 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/lessons" element={<Lessons />} />
+            <Route path="/lessons/basic-vocab" element={<BasicVocab />} />
+            <Route path="/lessons/common-phrases" element={<CommonPhrases />} />
+            <Route path="/lessons/verb-conjugation" element={<VerbConjugation />} />
+            <Route path="/lessons/advanced-grammar" element={<AdvancedGrammar />} />
             <Route path="/ai-tutor" element={<AITutor />} />
             <Route path="/grammar-tools" element={<GrammarTools />} />
             <Route path="/profile" element={<Profile />} />
