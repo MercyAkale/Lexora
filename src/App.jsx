@@ -18,6 +18,8 @@ import RolePlay from './pages/RolePlay';
 import DailyConversation from './pages/DailyConversation';
 import GrammarChecker from './pages/GrammarChecker';
 import VocabQuiz from './pages/VocabQuiz';
+import CommonWordsLesson from './pages/CommonWordsLesson';
+import SubjectPronounsLesson from './pages/SubjectPronounsLesson';
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
             <Route path="/lessons" element={<Lessons />} />
             <Route path="/lessons/basic-vocab" element={<BasicVocab />} />
             <Route path="/lessons/common-phrases" element={<CommonPhrases />} />
+            <Route path="/lessons/common-words" element={<CommonWordsLesson />} />
+            <Route path="/lessons/subject-pronouns" element={<SubjectPronounsLesson />} />
             <Route path="/lessons/verb-conjugation" element={<VerbConjugation />} />
             <Route path="/lessons/advanced-grammar" element={<AdvancedGrammar />} />
             <Route path="/ai-tutor" element={<AITutor />} />
