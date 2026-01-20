@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
@@ -76,7 +77,7 @@ function Home() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="grid grid-cols-3 gap-4 max-w-2xl mx-auto mb-16"
         >
-          {stats.map((stat, index) => (
+          {stats.map((stat) => (
             <motion.div
               key={stat.label}
               whileHover={{ scale: 1.05 }}

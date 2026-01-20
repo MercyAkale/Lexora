@@ -1,4 +1,5 @@
 import { useState } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
@@ -98,7 +99,7 @@ function SentenceBuilder() {
     }
   };
 
-  const useStarter = (starter) => {
+  const applyStarter = (starter) => {
     setSelectedWords([starter]);
   };
 
@@ -134,7 +135,7 @@ function SentenceBuilder() {
                 key={index}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => useStarter(starter)}
+                onClick={() => applyStarter(starter)}
                 className="p-3 bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 rounded-lg hover:shadow-md transition text-left"
               >
                 <div className="font-bold text-gray-800 dark:text-white">{starter.spanish}</div>
