@@ -14,6 +14,7 @@ function AITutor() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [targetLanguage] = useState('Spanish'); // Default language
+  const [messageIdCounter, setMessageIdCounter] = useState(2);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -97,11 +98,12 @@ function AITutor() {
     if (textToSend) {
       // Add user message
       const userMessage = { 
-        id: Date.now(), 
+        id: messageIdCounter, 
         text: textToSend, 
         isBot: false 
       };
       setMessages(prev => [...prev, userMessage]);
+      setMessageIdCounter(prev => prev + 1);
       setInput('');
       
       // Show typing indicator
@@ -112,12 +114,13 @@ function AITutor() {
         setIsTyping(false);
         const response = generateBotResponse(textToSend);
         const botMessage = {
-          id: Date.now() + 1,
+          id: messageIdCounter + 1,
           text: response.text,
           translation: response.translation,
           isBot: true
         };
         setMessages(prev => [...prev, botMessage]);
+        setMessageIdCounter(prev => prev + 2);
       }, 1200);
     }
   };
