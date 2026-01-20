@@ -34,7 +34,23 @@ function GrammarTools() {
       description: 'Check your sentences for grammatical errors',
       icon: '✓',
       color: 'from-green-500 to-emerald-500',
-      link: null
+      link: '/grammar/checker'
+    },
+    {
+      id: 5,
+      title: 'Verb Conjugator',
+      description: 'Practice verb conjugations with different tenses and gerunds',
+      icon: '🔄',
+      color: 'from-indigo-500 to-blue-500',
+      link: '/lessons/verb-conjugation'
+    },
+    {
+      id: 6,
+      title: 'Vocabulary Quiz',
+      description: 'Test your vocabulary knowledge with interactive quizzes',
+      icon: '📝',
+      color: 'from-orange-500 to-red-500',
+      link: '/grammar/vocab-quiz'
     },
   ];
 
@@ -54,7 +70,7 @@ function GrammarTools() {
           </p>
         </motion.div>
         
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {tools.map((tool, index) => (
             <motion.div
               key={tool.id}
@@ -63,29 +79,8 @@ function GrammarTools() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               whileHover={{ scale: 1.03, y: -5 }}
             >
-              {tool.link ? (
-                <Link to={tool.link}>
-                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-xl transition-all h-full border border-transparent hover:border-indigo-200 dark:hover:border-teal-500">
-                    <div className="flex items-start gap-4">
-                      <div className={`bg-gradient-to-br ${tool.color} w-12 h-12 rounded-lg flex items-center justify-center text-2xl shadow-md`}>
-                        {tool.icon}
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">
-                          {tool.title}
-                        </h3>
-                        <p className="text-gray-600 dark:text-gray-400 mb-4">
-                          {tool.description}
-                        </p>
-                        <span className="text-indigo-600 dark:text-teal-400 font-semibold hover:text-indigo-700 dark:hover:text-teal-300 transition">
-                          Try it now →
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              ) : (
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-xl transition-all h-full cursor-pointer">
+              <Link to={tool.link}>
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-xl transition-all h-full border border-transparent hover:border-indigo-200 dark:hover:border-teal-500">
                   <div className="flex items-start gap-4">
                     <div className={`bg-gradient-to-br ${tool.color} w-12 h-12 rounded-lg flex items-center justify-center text-2xl shadow-md`}>
                       {tool.icon}
@@ -98,12 +93,12 @@ function GrammarTools() {
                         {tool.description}
                       </p>
                       <span className="text-indigo-600 dark:text-teal-400 font-semibold hover:text-indigo-700 dark:hover:text-teal-300 transition">
-                        Coming soon
+                        Try it now →
                       </span>
                     </div>
                   </div>
                 </div>
-              )}
+              </Link>
             </motion.div>
           ))}
         </div>

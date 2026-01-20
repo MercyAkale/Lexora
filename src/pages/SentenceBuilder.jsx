@@ -33,6 +33,22 @@ function SentenceBuilder() {
       { spanish: 'poder', english: 'can' },
       { spanish: 'hacer', english: 'to do/make' },
     ],
+    gerunds: [
+      { spanish: 'hablando', english: 'speaking' },
+      { spanish: 'comiendo', english: 'eating' },
+      { spanish: 'viviendo', english: 'living' },
+      { spanish: 'trabajando', english: 'working' },
+      { spanish: 'estudiando', english: 'studying' },
+      { spanish: 'caminando', english: 'walking' },
+    ],
+    countries: [
+      { spanish: 'España', english: 'Spain' },
+      { spanish: 'México', english: 'Mexico' },
+      { spanish: 'Francia', english: 'France' },
+      { spanish: 'Italia', english: 'Italy' },
+      { spanish: 'Alemania', english: 'Germany' },
+      { spanish: 'Argentina', english: 'Argentina' },
+    ],
     objects: [
       { spanish: 'a la playa', english: 'to the beach' },
       { spanish: 'con amigos', english: 'with friends' },
@@ -226,6 +242,24 @@ function SentenceBuilder() {
           transition={{ delay: 0.3 }}
           className="space-y-6"
         >
+          {/* Gerund Tips */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.35 }}
+            className="bg-purple-50 dark:bg-purple-900/30 rounded-xl p-6 border-2 border-purple-200 dark:border-purple-700"
+          >
+            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-3 flex items-center gap-2">
+              <span>💡</span> Gerund Tips
+            </h3>
+            <p className="text-gray-700 dark:text-gray-300 mb-2">
+              <strong>Use gerunds for ongoing actions:</strong> "I am speaking" → "Estoy hablando"
+            </p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Example: "Yo vivo en España" (I live in Spain) + "hablando" → "Estoy viviendo en España y hablando español"
+            </p>
+          </motion.div>
+          
           {Object.entries(wordBlocks).map(([category, words], categoryIndex) => (
             <motion.div
               key={category}
@@ -237,9 +271,16 @@ function SentenceBuilder() {
               <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4 capitalize flex items-center gap-2">
                 {category === 'subjects' && '👤'}
                 {category === 'verbs' && '⚡'}
+                {category === 'gerunds' && '🔄'}
+                {category === 'countries' && '🌍'}
                 {category === 'objects' && '🎯'}
                 {category === 'conjunctions' && '🔗'}
                 <span>{category}</span>
+                {category === 'gerunds' && (
+                  <span className="text-sm font-normal text-purple-600 dark:text-purple-400">
+                    (-ando/-iendo forms)
+                  </span>
+                )}
               </h3>
               <div className="flex flex-wrap gap-3">
                 {words.map((word, index) => (
