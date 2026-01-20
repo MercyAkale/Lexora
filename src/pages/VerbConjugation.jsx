@@ -7,12 +7,13 @@ function VerbConjugation() {
   const [completed, setCompleted] = useState(false);
   const [newVerb, setNewVerb] = useState('');
 
-  // Conjugation table for "hablar" across 4 tenses
+  // Conjugation table for "hablar" across 4 tenses + gerund
   const conjugationData = {
     present: ['hablo', 'hablas', 'habla', 'hablamos', 'habláis', 'hablan'],
     preterite: ['hablé', 'hablaste', 'habló', 'hablamos', 'hablasteis', 'hablaron'],
     imperfect: ['hablaba', 'hablabas', 'hablaba', 'hablábamos', 'hablabais', 'hablaban'],
     future: ['hablaré', 'hablarás', 'hablará', 'hablaremos', 'hablaréis', 'hablarán'],
+    gerund: ['hablando', 'hablando', 'hablando', 'hablando', 'hablando', 'hablando'],
   };
 
   const persons = ['yo', 'tú', 'él/ella', 'nosotros', 'vosotros', 'ellos/ellas'];
@@ -21,6 +22,8 @@ function VerbConjugation() {
     'Yo hablo español todos los días. (Present tense)',
     'Ayer hablé con mi profesor sobre la tarea. (Preterite tense)',
     'Cuando era niño, hablaba francés con fluidez. (Imperfect tense)',
+    'Estoy hablando español ahora. (Gerund - Present continuous)',
+    'Yo vivo en España y hablo español. (Country example with proper noun)',
   ];
 
   const handleConjugateVerb = () => {
@@ -99,6 +102,9 @@ function VerbConjugation() {
                     <th className="border border-indigo-300 dark:border-indigo-700 px-4 py-3 text-left text-indigo-800 dark:text-indigo-200 font-semibold">
                       Future Simple
                     </th>
+                    <th className="border border-indigo-300 dark:border-indigo-700 px-4 py-3 text-left text-indigo-800 dark:text-indigo-200 font-semibold">
+                      Gerund (-ando/-iendo)
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -124,6 +130,9 @@ function VerbConjugation() {
                       </td>
                       <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-indigo-600 dark:text-teal-400 font-bold">
                         {conjugationData.future[index]}
+                      </td>
+                      <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-purple-600 dark:text-purple-400 font-bold">
+                        {conjugationData.gerund[index]}
                       </td>
                     </motion.tr>
                   ))}
@@ -154,6 +163,32 @@ function VerbConjugation() {
                   <p className="text-lg text-gray-700 dark:text-gray-300">{example}</p>
                 </motion.div>
               ))}
+            </div>
+          </motion.div>
+
+          {/* Gerund Tips Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.1 }}
+            className="bg-purple-50 dark:bg-purple-900/30 rounded-xl shadow-lg p-8 mb-8 border-2 border-purple-200 dark:border-purple-700"
+          >
+            <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+              <span>💡</span> Gerund Tips
+            </h3>
+            <div className="space-y-3 text-gray-700 dark:text-gray-300">
+              <p className="flex items-start gap-2">
+                <span className="text-purple-600 dark:text-purple-400 mt-1">•</span>
+                <span><strong>Use gerunds for ongoing actions:</strong> "I am speaking" → "Estoy hablando"</span>
+              </p>
+              <p className="flex items-start gap-2">
+                <span className="text-purple-600 dark:text-purple-400 mt-1">•</span>
+                <span><strong>Formation:</strong> -ar verbs use -ando (hablar → hablando), -er/-ir verbs use -iendo (comer → comiendo)</span>
+              </p>
+              <p className="flex items-start gap-2">
+                <span className="text-purple-600 dark:text-purple-400 mt-1">•</span>
+                <span><strong>Common with estar:</strong> "Estoy trabajando" (I am working), "Estás comiendo" (You are eating)</span>
+              </p>
             </div>
           </motion.div>
 

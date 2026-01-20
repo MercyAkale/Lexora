@@ -13,6 +13,11 @@ import BasicVocab from './pages/BasicVocab';
 import CommonPhrases from './pages/CommonPhrases';
 import VerbConjugation from './pages/VerbConjugation';
 import AdvancedGrammar from './pages/AdvancedGrammar';
+import AlphabetNumbers from './pages/AlphabetNumbers';
+import RolePlay from './pages/RolePlay';
+import DailyConversation from './pages/DailyConversation';
+import GrammarChecker from './pages/GrammarChecker';
+import VocabQuiz from './pages/VocabQuiz';
 
 function App() {
   return (
@@ -29,11 +34,16 @@ function App() {
             <Route path="/lessons/advanced-grammar" element={<AdvancedGrammar />} />
             <Route path="/ai-tutor" element={<AITutor />} />
             <Route path="/grammar-tools" element={<GrammarTools />} />
+            <Route path="/grammar/checker" element={<GrammarChecker />} />
+            <Route path="/grammar/vocab-quiz" element={<VocabQuiz />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/verbs-tenses" element={<VerbsTenses />} />
             <Route path="/grammar/sentence-builder" element={<SentenceBuilder />} />
             <Route path="/sentence-builder" element={<SentenceBuilder />} />
             <Route path="/conjunctions" element={<Conjunctions />} />
+            <Route path="/basics/alphabet-numbers" element={<AlphabetNumbers />} />
+            <Route path="/roleplay" element={<RolePlay />} />
+            <Route path="/daily-conversation" element={<DailyConversation />} />
           </Routes>
         </div>
       </Router>
