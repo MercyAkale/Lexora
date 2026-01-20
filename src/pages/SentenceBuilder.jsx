@@ -5,64 +5,49 @@ import { Link } from 'react-router-dom';
 
 function SentenceBuilder() {
   const [selectedWords, setSelectedWords] = useState([]);
-  const [savedSentences, setSavedSentences] = useState([]);
 
   const sentenceStarters = [
-    { spanish: 'Me gustaría...', english: 'I would like to...' },
-    { spanish: 'Ayer fui a...', english: 'Yesterday I went to...' },
-    { spanish: 'Si tuviera...', english: 'If I had...' },
-    { spanish: 'Aunque era...', english: 'Although it was...' },
-    { spanish: 'Cuando llego...', english: 'When I arrive...' },
-    { spanish: 'Espero que...', english: 'I hope that...' },
+    { spanish: 'Me gustaría...', english: 'I would like to' },
+    { spanish: 'Ayer yo...', english: 'Yesterday I' },
+    { spanish: 'Si yo tuviera...', english: 'If I had' },
+    { spanish: 'Aunque es...', english: 'Although it is' },
+    { spanish: 'Cuando llego...', english: 'When I arrive' },
+    { spanish: 'Espero que...', english: 'I hope that' },
   ];
 
   const wordBlocks = {
     subjects: [
       { spanish: 'yo', english: 'I' },
       { spanish: 'tú', english: 'you' },
-      { spanish: 'él', english: 'he' },
-      { spanish: 'ella', english: 'she' },
+      { spanish: 'él/ella', english: 'he/she' },
       { spanish: 'nosotros', english: 'we' },
-      { spanish: 'ellos', english: 'they' },
+      { spanish: 'ellos/ellas', english: 'they' },
     ],
     verbs: [
-      { spanish: 'como', english: 'eat' },
-      { spanish: 'vivo', english: 'live' },
-      { spanish: 'hablo', english: 'speak' },
-      { spanish: 'voy', english: 'go' },
-      { spanish: 'tengo', english: 'have' },
-      { spanish: 'quiero', english: 'want' },
-      { spanish: 'puedo', english: 'can' },
-      { spanish: 'soy', english: 'am/is' },
+      { spanish: 'hablar', english: 'to speak' },
+      { spanish: 'comer', english: 'to eat' },
+      { spanish: 'vivir', english: 'to live' },
+      { spanish: 'ir', english: 'to go' },
+      { spanish: 'tener', english: 'to have' },
+      { spanish: 'querer', english: 'to want' },
+      { spanish: 'poder', english: 'can' },
+      { spanish: 'hacer', english: 'to do/make' },
     ],
     objects: [
-      { spanish: 'la casa', english: 'the house' },
-      { spanish: 'el libro', english: 'the book' },
-      { spanish: 'comida', english: 'food' },
+      { spanish: 'a la playa', english: 'to the beach' },
+      { spanish: 'con amigos', english: 'with friends' },
+      { spanish: 'un libro', english: 'a book' },
+      { spanish: 'la comida', english: 'the food' },
       { spanish: 'español', english: 'Spanish' },
       { spanish: 'música', english: 'music' },
-      { spanish: 'amigos', english: 'friends' },
-    ],
-    adjectives: [
-      { spanish: 'grande', english: 'big' },
-      { spanish: 'pequeño', english: 'small' },
-      { spanish: 'bueno', english: 'good' },
-      { spanish: 'feliz', english: 'happy' },
-      { spanish: 'rápido', english: 'fast' },
-      { spanish: 'hermoso', english: 'beautiful' },
-    ],
-    time: [
-      { spanish: 'hoy', english: 'today' },
-      { spanish: 'mañana', english: 'tomorrow' },
-      { spanish: 'ayer', english: 'yesterday' },
-      { spanish: 'ahora', english: 'now' },
-      { spanish: 'siempre', english: 'always' },
-      { spanish: 'nunca', english: 'never' },
+      { spanish: 'en casa', english: 'at home' },
+      { spanish: 'el parque', english: 'the park' },
     ],
     conjunctions: [
-      { spanish: 'y', english: 'and' },
-      { spanish: 'pero', english: 'but' },
       { spanish: 'porque', english: 'because' },
+      { spanish: 'pero', english: 'but' },
+      { spanish: 'y', english: 'and' },
+      { spanish: 'aunque', english: 'although' },
       { spanish: 'cuando', english: 'when' },
       { spanish: 'si', english: 'if' },
       { spanish: 'que', english: 'that' },
@@ -82,43 +67,46 @@ function SentenceBuilder() {
   };
 
   const generateRandomSentence = () => {
+    const starter = sentenceStarters[Math.floor(Math.random() * sentenceStarters.length)];
     const subject = wordBlocks.subjects[Math.floor(Math.random() * wordBlocks.subjects.length)];
     const verb = wordBlocks.verbs[Math.floor(Math.random() * wordBlocks.verbs.length)];
     const object = wordBlocks.objects[Math.floor(Math.random() * wordBlocks.objects.length)];
-    const time = wordBlocks.time[Math.floor(Math.random() * wordBlocks.time.length)];
+    const conjunction = wordBlocks.conjunctions[Math.floor(Math.random() * wordBlocks.conjunctions.length)];
     
-    setSelectedWords([subject, verb, object, time]);
+    setSelectedWords([starter, subject, verb, object, conjunction]);
   };
 
   const saveSentence = () => {
     if (selectedWords.length > 0) {
       const spanish = selectedWords.map(w => w.spanish).join(' ');
       const english = selectedWords.map(w => w.english).join(' ');
-      setSavedSentences([...savedSentences, { spanish, english, timestamp: Date.now() }]);
-      setSelectedWords([]);
+      console.log('Saving sentence:', { spanish, english });
+      alert(`Sentence saved!\n\nSpanish: ${spanish}\nEnglish: ${english}`);
     }
   };
 
-  const applyStarter = (starter) => {
-    setSelectedWords([starter]);
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors">
       <div className="container mx-auto px-4 py-8">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          className="mb-6"
         >
-          <Link to="/grammar-tools" className="text-indigo-600 dark:text-teal-400 hover:underline mb-2 inline-block">
-            ← Back to Grammar Tools
+          <Link to="/grammar-tools">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 text-indigo-600 dark:text-teal-400 hover:text-indigo-700 dark:hover:text-teal-300 font-semibold mb-4"
+            >
+              <span>←</span> Back to Grammar Tools
+            </motion.button>
           </Link>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-teal-500 bg-clip-text text-transparent mb-2">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-600 bg-clip-text text-transparent mb-2">
             Sentence Builder
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Build perfect sentences with interactive word blocks
+            Build perfect Spanish sentences with interactive word blocks
           </p>
         </motion.div>
 
@@ -126,51 +114,59 @@ function SentenceBuilder() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6"
+          transition={{ delay: 0.1 }}
+          className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-6"
         >
-          <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Sentence Starters</h2>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+            <span>🚀</span> Sentence Starters
+          </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {sentenceStarters.map((starter, index) => (
               <motion.button
                 key={index}
-                whileHover={{ scale: 1.05 }}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2 + index * 0.05 }}
+                whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => applyStarter(starter)}
-                className="p-3 bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 rounded-lg hover:shadow-md transition text-left"
+                onClick={() => addWord(starter)}
+                className="p-3 bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 rounded-lg hover:shadow-md transition text-left border-2 border-transparent hover:border-purple-300 dark:hover:border-pink-700"
               >
-                <div className="font-bold text-gray-800 dark:text-white">{starter.spanish}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">{starter.english}</div>
+                <div className="font-bold text-gray-800 dark:text-white text-sm">{starter.spanish}</div>
+                <div className="text-xs text-gray-600 dark:text-gray-400">{starter.english}</div>
               </motion.button>
             ))}
           </div>
         </motion.div>
 
-        {/* Sentence Preview */}
+        {/* Sentence Preview Area */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6"
+          transition={{ delay: 0.2 }}
+          className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 mb-6 border-2 border-indigo-200 dark:border-teal-700"
         >
-          <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Your Sentence</h2>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+            <span>✨</span> Your Sentence Preview
+          </h2>
           
-          {/* Spanish */}
-          <div className="min-h-[60px] bg-gradient-to-r from-indigo-50 to-teal-50 dark:from-gray-700 dark:to-gray-700 rounded-lg p-4 mb-4 flex flex-wrap gap-2 items-center">
+          {/* Spanish Sentence */}
+          <div className="min-h-[80px] bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-700 rounded-lg p-4 mb-4 flex flex-wrap gap-2 items-center border-2 border-dashed border-indigo-300 dark:border-teal-600">
             {selectedWords.length === 0 ? (
-              <span className="text-gray-400 dark:text-gray-500">Click words below to build your sentence...</span>
+              <span className="text-gray-400 dark:text-gray-500 italic">Click word blocks below to build your sentence...</span>
             ) : (
               selectedWords.map((word, index) => (
                 <motion.div
                   key={index}
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  exit={{ scale: 0 }}
-                  whileHover={{ scale: 1.1 }}
-                  className="bg-white dark:bg-gray-600 px-4 py-2 rounded-lg shadow-md cursor-pointer font-bold text-indigo-600 dark:text-teal-400 flex items-center gap-2"
+                  initial={{ scale: 0, rotate: -10 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  exit={{ scale: 0, rotate: 10 }}
+                  whileHover={{ scale: 1.1, y: -2 }}
+                  className="bg-white dark:bg-gray-600 px-4 py-2 rounded-lg shadow-md cursor-pointer font-bold text-indigo-700 dark:text-teal-300 flex items-center gap-2 border-2 border-indigo-300 dark:border-teal-500"
                   onClick={() => removeWord(index)}
                 >
                   {word.spanish}
-                  <span className="text-red-500 text-xs">✕</span>
+                  <span className="text-red-500 text-xs hover:scale-125 transition">✕</span>
                 </motion.div>
               ))
             )}
@@ -179,104 +175,92 @@ function SentenceBuilder() {
           {/* English Translation */}
           {selectedWords.length > 0 && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 mb-4"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-gradient-to-r from-purple-100 to-pink-100 dark:from-gray-700 dark:to-gray-700 rounded-lg p-4 mb-4 border-2 border-purple-200 dark:border-pink-700"
             >
-              <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Translation:</div>
-              <div className="text-lg text-gray-800 dark:text-white">
+              <div className="text-sm text-gray-600 dark:text-gray-400 mb-1 font-semibold flex items-center gap-2">
+                <span>🌐</span> English Translation:
+              </div>
+              <div className="text-lg text-gray-800 dark:text-white font-medium">
                 {selectedWords.map(w => w.english).join(' ')}
               </div>
             </motion.div>
           )}
 
           {/* Action Buttons */}
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               onClick={generateRandomSentence}
-              className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:shadow-lg transition"
+              className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition flex items-center justify-center gap-2"
             >
-              🎲 Random Sentence
+              <span>🎲</span> Generate Random Sentence
             </motion.button>
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               onClick={saveSentence}
               disabled={selectedWords.length === 0}
-              className="flex-1 bg-gradient-to-r from-indigo-600 to-teal-500 text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-gradient-to-r from-indigo-600 to-teal-500 hover:from-indigo-700 hover:to-teal-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              💾 Save Sentence
+              <span>💾</span> Save Sentence
             </motion.button>
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               onClick={clearSentence}
               disabled={selectedWords.length === 0}
-              className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              🗑️ Clear
+              <span>🗑️</span> Clear
             </motion.button>
           </div>
         </motion.div>
 
-        {/* Word Blocks */}
+        {/* Word Blocks Categories */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.3 }}
           className="space-y-6"
         >
-          {Object.entries(wordBlocks).map(([category, words]) => (
-            <div key={category} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-3 capitalize">
-                {category}
+          {Object.entries(wordBlocks).map(([category, words], categoryIndex) => (
+            <motion.div
+              key={category}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 + categoryIndex * 0.1 }}
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6"
+            >
+              <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4 capitalize flex items-center gap-2">
+                {category === 'subjects' && '👤'}
+                {category === 'verbs' && '⚡'}
+                {category === 'objects' && '🎯'}
+                {category === 'conjunctions' && '🔗'}
+                <span>{category}</span>
               </h3>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-3">
                 {words.map((word, index) => (
                   <motion.button
                     key={index}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.5 + categoryIndex * 0.1 + index * 0.02 }}
+                    whileHover={{ scale: 1.08, y: -2 }}
+                    whileTap={{ scale: 0.92 }}
                     onClick={() => addWord(word)}
-                    className="px-4 py-2 bg-gradient-to-r from-indigo-100 to-teal-100 dark:from-indigo-900 dark:to-teal-900 text-gray-800 dark:text-white rounded-lg font-medium hover:shadow-md transition"
+                    className="px-4 py-3 bg-gradient-to-br from-indigo-100 to-teal-100 dark:from-indigo-900 dark:to-teal-900 text-gray-800 dark:text-white rounded-lg font-medium hover:shadow-md transition border-2 border-transparent hover:border-indigo-300 dark:hover:border-teal-500"
                   >
-                    <div className="font-bold">{word.spanish}</div>
+                    <div className="font-bold text-sm">{word.spanish}</div>
                     <div className="text-xs opacity-70">{word.english}</div>
                   </motion.button>
                 ))}
               </div>
-            </div>
+            </motion.div>
           ))}
         </motion.div>
-
-        {/* Saved Sentences */}
-        {savedSentences.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mt-6"
-          >
-            <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4">
-              Saved Sentences ({savedSentences.length})
-            </h2>
-            <div className="space-y-3">
-              {savedSentences.slice(-5).reverse().map((sentence, index) => (
-                <motion.div
-                  key={sentence.timestamp}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="p-4 bg-gradient-to-r from-indigo-50 to-teal-50 dark:from-gray-700 dark:to-gray-700 rounded-lg"
-                >
-                  <div className="font-bold text-gray-800 dark:text-white mb-1">{sentence.spanish}</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">{sentence.english}</div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        )}
       </div>
     </div>
   );
