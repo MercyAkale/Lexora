@@ -2,29 +2,68 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
+import Accordion from '../components/ui/Accordion';
+import Tooltip from '../components/ui/Tooltip';
+import LevelBadge from '../components/ui/LevelBadge';
+import { useLanguageStore } from '../stores/languageStore';
+import { gerundData } from '../data/gerundData';
+import { countryExamples } from '../data/countryExamples';
+import { translations } from '../data/translationData';
 
 function VerbConjugation() {
   const [completed, setCompleted] = useState(false);
   const [newVerb, setNewVerb] = useState('');
+  const { selectedLanguage } = useLanguageStore();
 
-  // Conjugation table for "hablar" across 4 tenses + gerund
+  // Get language-specific data
+  const languageCode = selectedLanguage.code;
+  const speakVerb = translations.verbs[languageCode]?.speak || translations.verbs.es.speak;
+  const persons = translations.pronouns[languageCode] || translations.pronouns.es;
+  const currentGerundData = gerundData[languageCode] || gerundData.es;
+  const currentCountryExamples = countryExamples[languageCode] || countryExamples.es;
+
+  // Conjugation table for "speak" verb - language aware
   const conjugationData = {
-    present: ['hablo', 'hablas', 'habla', 'hablamos', 'habláis', 'hablan'],
-    preterite: ['hablé', 'hablaste', 'habló', 'hablamos', 'hablasteis', 'hablaron'],
-    imperfect: ['hablaba', 'hablabas', 'hablaba', 'hablábamos', 'hablabais', 'hablaban'],
-    future: ['hablaré', 'hablarás', 'hablará', 'hablaremos', 'hablaréis', 'hablarán'],
-    gerund: ['hablando', 'hablando', 'hablando', 'hablando', 'hablando', 'hablando'],
+    present: speakVerb.translations,
+    preterite: languageCode === 'es' ? ['hablé', 'hablaste', 'habló', 'hablamos', 'hablasteis', 'hablaron'] : speakVerb.translations,
+    imperfect: languageCode === 'es' ? ['hablaba', 'hablabas', 'hablaba', 'hablábamos', 'hablabais', 'hablaban'] : speakVerb.translations,
+    future: languageCode === 'es' ? ['hablaré', 'hablarás', 'hablará', 'hablaremos', 'hablaréis', 'hablarán'] : speakVerb.translations,
+    gerund: [speakVerb.gerund, speakVerb.gerund, speakVerb.gerund, speakVerb.gerund, speakVerb.gerund, speakVerb.gerund],
   };
 
-  const persons = ['yo', 'tú', 'él/ella', 'nosotros', 'vosotros', 'ellos/ellas'];
+  // Generate examples based on language
+  const generateExamples = () => {
+    if (languageCode === 'es') {
+      return [
+        'Yo hablo español todos los días. (Present tense)',
+        'Ayer hablé con mi profesor sobre la tarea. (Preterite tense)',
+        'Cuando era niño, hablaba francés con fluidez. (Imperfect tense)',
+        'Estoy hablando español ahora. (Gerund - Present continuous)',
+        ...currentCountryExamples.slice(0, 2).map(ex => `${ex.sentence} - ${ex.translation}`),
+      ];
+    } else if (languageCode === 'fr') {
+      return [
+        'Je parle français tous les jours. (Present tense)',
+        'Je suis en train de parler français maintenant. (Present continuous)',
+        ...currentCountryExamples.slice(0, 3).map(ex => `${ex.sentence} - ${ex.translation}`),
+      ];
+    } else if (languageCode === 'it') {
+      return [
+        'Parlo italiano tutti i giorni. (Present tense)',
+        'Sto parlando italiano adesso. (Present continuous)',
+        ...currentCountryExamples.slice(0, 3).map(ex => `${ex.sentence} - ${ex.translation}`),
+      ];
+    } else {
+      return currentCountryExamples.slice(0, 3).map(ex => `${ex.sentence} - ${ex.translation}`);
+    }
+  };
 
-  const examples = [
-    'Yo hablo español todos los días. (Present tense)',
-    'Ayer hablé con mi profesor sobre la tarea. (Preterite tense)',
-    'Cuando era niño, hablaba francés con fluidez. (Imperfect tense)',
-    'Estoy hablando español ahora. (Gerund - Present continuous)',
-    'Yo vivo en España y hablo español. (Country example with proper noun)',
-  ];
+  const examples = generateExamples();
+
+  // Helper function to get the language-specific text from example objects
+  const getExampleText = (example) => {
+    return example[Object.keys(example)[0]];
+  };
 
   const handleConjugateVerb = () => {
     if (newVerb.trim()) {
@@ -80,7 +119,7 @@ function VerbConjugation() {
             className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8"
           >
             <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-6 text-center">
-              Hablar (to speak)
+              {speakVerb.infinitive} (to speak) - {selectedLanguage.flag} {selectedLanguage.name}
             </h2>
             
             <div className="overflow-x-auto">
@@ -91,19 +130,29 @@ function VerbConjugation() {
                       Person
                     </th>
                     <th className="border border-indigo-300 dark:border-indigo-700 px-4 py-3 text-left text-indigo-800 dark:text-indigo-200 font-semibold">
-                      Present
+                      <Tooltip content="The present tense is used for actions happening now or habitual actions">
+                        Present
+                      </Tooltip>
                     </th>
                     <th className="border border-indigo-300 dark:border-indigo-700 px-4 py-3 text-left text-indigo-800 dark:text-indigo-200 font-semibold">
-                      Preterite
+                      <Tooltip content="Past tense for completed actions">
+                        {languageCode === 'es' ? 'Preterite' : 'Past'}
+                      </Tooltip>
                     </th>
                     <th className="border border-indigo-300 dark:border-indigo-700 px-4 py-3 text-left text-indigo-800 dark:text-indigo-200 font-semibold">
-                      Imperfect
+                      <Tooltip content="Past tense for ongoing or habitual actions in the past">
+                        {languageCode === 'es' ? 'Imperfect' : 'Past Continuous'}
+                      </Tooltip>
                     </th>
                     <th className="border border-indigo-300 dark:border-indigo-700 px-4 py-3 text-left text-indigo-800 dark:text-indigo-200 font-semibold">
-                      Future Simple
+                      <Tooltip content="Future tense for actions that will happen">
+                        Future
+                      </Tooltip>
                     </th>
                     <th className="border border-indigo-300 dark:border-indigo-700 px-4 py-3 text-left text-indigo-800 dark:text-indigo-200 font-semibold">
-                      Gerund (-ando/-iendo)
+                      <Tooltip content={`The ${currentGerundData.name} form expresses ongoing actions`}>
+                        {currentGerundData.name} ({currentGerundData.ending})
+                      </Tooltip>
                     </th>
                   </tr>
                 </thead>
@@ -141,14 +190,129 @@ function VerbConjugation() {
             </div>
           </motion.div>
 
+          {/* Educational Accordion Sections */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="space-y-4 mb-8"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
+                <span>📚</span> Learning Levels
+              </h3>
+              <div className="flex gap-2">
+                <LevelBadge level="beginner" />
+                <LevelBadge level="intermediate" />
+                <LevelBadge level="advanced" />
+              </div>
+            </div>
+
+            <Accordion 
+              title={currentGerundData.beginner.title} 
+              level="beginner"
+              defaultOpen={true}
+            >
+              <div className="space-y-4">
+                <p className="text-gray-700 dark:text-gray-300">
+                  {currentGerundData.beginner.explanation}
+                </p>
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-gray-800 dark:text-white">Examples:</h4>
+                  {currentGerundData.beginner.examples.map((example, idx) => (
+                    <div key={idx} className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border-l-4 border-green-500">
+                      <p className="font-semibold text-gray-800 dark:text-white">
+                        {getExampleText(example)}
+                      </p>
+                      <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">
+                        {example.english}
+                      </p>
+                      {example.verb && (
+                        <p className="text-green-600 dark:text-green-400 text-xs mt-1 font-mono">
+                          {example.verb}
+                        </p>
+                      )}
+                      {example.note && (
+                        <p className="text-gray-500 dark:text-gray-500 text-xs mt-1 italic">
+                          💡 {example.note}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Accordion>
+
+            <Accordion 
+              title={currentGerundData.intermediate.title}
+              level="intermediate"
+            >
+              <div className="space-y-4">
+                <p className="text-gray-700 dark:text-gray-300">
+                  {currentGerundData.intermediate.explanation}
+                </p>
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-gray-800 dark:text-white">Examples:</h4>
+                  {currentGerundData.intermediate.examples.map((example, idx) => (
+                    <div key={idx} className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-500">
+                      <p className="font-semibold text-gray-800 dark:text-white">
+                        {getExampleText(example)}
+                      </p>
+                      <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">
+                        {example.english}
+                      </p>
+                      {example.note && (
+                        <p className="text-gray-500 dark:text-gray-500 text-xs mt-1 italic">
+                          💡 {example.note}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Accordion>
+
+            <Accordion 
+              title={currentGerundData.advanced.title}
+              level="advanced"
+            >
+              <div className="space-y-4">
+                <p className="text-gray-700 dark:text-gray-300">
+                  {currentGerundData.advanced.explanation}
+                </p>
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-gray-800 dark:text-white">Examples:</h4>
+                  {currentGerundData.advanced.examples.map((example, idx) => (
+                    <div key={idx} className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border-l-4 border-purple-500">
+                      <p className="font-semibold text-gray-800 dark:text-white">
+                        {getExampleText(example)}
+                      </p>
+                      <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">
+                        {example.english}
+                      </p>
+                      {example.note && (
+                        <p className="text-gray-500 dark:text-gray-500 text-xs mt-1 italic">
+                          💡 {example.note}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Accordion>
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.8 }}
             className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8"
           >
-            <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+            <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
               Example Sentences
+              <Tooltip content="These examples show how to use the verb in different contexts">
+                <span className="text-sm text-gray-500">ℹ️</span>
+              </Tooltip>
             </h3>
             <div className="space-y-4">
               {examples.map((example, index) => (
@@ -166,29 +330,71 @@ function VerbConjugation() {
             </div>
           </motion.div>
 
-          {/* Gerund Tips Section */}
+          {/* Country Examples Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 1.1 }}
+            className="bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 rounded-xl shadow-lg p-8 mb-8 border-2 border-teal-200 dark:border-teal-700"
+          >
+            <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+              <span>🌍</span> 
+              <Tooltip content="Learn how to use country names correctly in sentences">
+                Country Examples
+              </Tooltip>
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {currentCountryExamples.slice(0, 6).map((example, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, delay: 1.2 + idx * 0.1 }}
+                  className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-teal-200 dark:border-teal-700"
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🏳️</span>
+                    <span className="font-semibold text-teal-600 dark:text-teal-400">
+                      {example.country}
+                    </span>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      ({example.english})
+                    </span>
+                  </div>
+                  <p className="text-gray-800 dark:text-white font-medium mb-1">
+                    {example.sentence}
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {example.translation}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Gerund Tips Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.4 }}
             className="bg-purple-50 dark:bg-purple-900/30 rounded-xl shadow-lg p-8 mb-8 border-2 border-purple-200 dark:border-purple-700"
           >
             <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
-              <span>💡</span> Gerund Tips
+              <span>💡</span> 
+              <Tooltip content={`Quick tips for using ${currentGerundData.name}`}>
+                {currentGerundData.name} Tips
+              </Tooltip>
             </h3>
             <div className="space-y-3 text-gray-700 dark:text-gray-300">
-              <p className="flex items-start gap-2">
-                <span className="text-purple-600 dark:text-purple-400 mt-1">•</span>
-                <span><strong>Use gerunds for ongoing actions:</strong> "I am speaking" → "Estoy hablando"</span>
-              </p>
-              <p className="flex items-start gap-2">
-                <span className="text-purple-600 dark:text-purple-400 mt-1">•</span>
-                <span><strong>Formation:</strong> -ar verbs use -ando (hablar → hablando), -er/-ir verbs use -iendo (comer → comiendo)</span>
-              </p>
-              <p className="flex items-start gap-2">
-                <span className="text-purple-600 dark:text-purple-400 mt-1">•</span>
-                <span><strong>Common with estar:</strong> "Estoy trabajando" (I am working), "Estás comiendo" (You are eating)</span>
-              </p>
+              {currentGerundData.beginner.examples.slice(0, 3).map((example, idx) => (
+                <p key={idx} className="flex items-start gap-2">
+                  <span className="text-purple-600 dark:text-purple-400 mt-1">•</span>
+                  <span>
+                    <strong>{getExampleText(example)}</strong> → {example.english}
+                    {example.verb && <span className="text-purple-600 dark:text-purple-400 ml-2 text-sm font-mono">({example.verb})</span>}
+                  </span>
+                </p>
+              ))}
             </div>
           </motion.div>
 
@@ -196,14 +402,16 @@ function VerbConjugation() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.2 }}
+            transition={{ duration: 0.6, delay: 1.6 }}
             className="bg-gradient-to-r from-indigo-100 to-teal-100 dark:from-gray-800 dark:to-gray-700 rounded-xl shadow-lg p-8 mb-8"
           >
             <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-              Practice: Conjugate Another Verb
+              <Tooltip content="Try conjugating different verbs to practice">
+                Practice: Conjugate Another Verb
+              </Tooltip>
             </h3>
             <p className="text-gray-600 dark:text-gray-300 mb-4">
-              Enter a Spanish verb in infinitive form (e.g., comer, vivir, estudiar) to see its conjugations:
+              Enter a {selectedLanguage.name} verb in <Tooltip content="The base form of the verb (e.g., to speak, to eat)">infinitive</Tooltip> form to see its <Tooltip content="Different forms of the verb for different persons and tenses">conjugations</Tooltip>:
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <input
