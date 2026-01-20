@@ -6,8 +6,10 @@ function Lessons() {
   const lessons = [
     { id: 1, title: 'Basic Vocabulary', level: 'Beginner', progress: 75, path: '/lessons/basic-vocab' },
     { id: 2, title: 'Common Phrases', level: 'Beginner', progress: 50, path: '/lessons/common-phrases' },
-    { id: 3, title: 'Verb Conjugation', level: 'Intermediate', progress: 30, path: '/lessons/verb-conjugation' },
-    { id: 4, title: 'Advanced Grammar', level: 'Advanced', progress: 0, path: '/lessons/advanced-grammar' },
+    { id: 3, title: '100 Most Common Words', level: 'Beginner', progress: 0, path: '/lessons/common-words' },
+    { id: 4, title: 'Subject Pronouns', level: 'Beginner', progress: 0, path: '/lessons/subject-pronouns' },
+    { id: 5, title: 'Verb Conjugation', level: 'Intermediate', progress: 30, path: '/lessons/verb-conjugation' },
+    { id: 6, title: 'Advanced Grammar', level: 'Advanced', progress: 0, path: '/lessons/advanced-grammar' },
   ];
 
   return (
