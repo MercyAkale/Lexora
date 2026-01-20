@@ -45,10 +45,13 @@ export const personas = [
   },
 ];
 
+// Default persona
+const DEFAULT_PERSONA = personas[0]; // Maria - Friendly Teacher
+
 export const usePersonaStore = create(
   persist(
     (set) => ({
-      selectedPersona: personas[0], // Default to Maria
+      selectedPersona: DEFAULT_PERSONA,
       setPersona: (persona) => set({ selectedPersona: persona }),
     }),
     {
