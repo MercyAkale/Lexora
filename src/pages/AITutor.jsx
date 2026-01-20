@@ -16,7 +16,6 @@ function AITutor() {
   const [targetLanguage] = useState('Spanish'); // Default language
   const [messageIdCounter, setMessageIdCounter] = useState(2);
   const messagesEndRef = useRef(null);
-  const inputRef = useRef(null);
 
   const suggestedReplies = [
     "Teach me verbs",
@@ -96,9 +95,11 @@ function AITutor() {
     const textToSend = messageText || input.trim();
     
     if (textToSend) {
+      const currentId = messageIdCounter;
+      
       // Add user message
       const userMessage = { 
-        id: messageIdCounter, 
+        id: currentId, 
         text: textToSend, 
         isBot: false 
       };
@@ -114,13 +115,13 @@ function AITutor() {
         setIsTyping(false);
         const response = generateBotResponse(textToSend);
         const botMessage = {
-          id: messageIdCounter + 1,
+          id: currentId + 1,
           text: response.text,
           translation: response.translation,
           isBot: true
         };
         setMessages(prev => [...prev, botMessage]);
-        setMessageIdCounter(prev => prev + 2);
+        setMessageIdCounter(prev => prev + 1);
       }, 1200);
     }
   };
@@ -238,7 +239,6 @@ function AITutor() {
           <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-b-xl">
             <div className="flex gap-2">
               <input
-                ref={inputRef}
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
