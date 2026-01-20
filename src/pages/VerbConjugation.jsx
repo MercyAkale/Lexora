@@ -125,7 +125,7 @@ function VerbConjugation() {
                       <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-indigo-600 dark:text-teal-400 font-bold">
                         {conjugationData.future[index]}
                       </td>
-                    </tr>
+                    </motion.tr>
                   ))}
                 </tbody>
               </table>
