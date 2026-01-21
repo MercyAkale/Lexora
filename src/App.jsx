@@ -1,9 +1,13 @@
 import { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { DarkModeProvider } from './contexts/DarkModeContext';
+import { useAuth } from './auth/useAuth';
+import { ProtectedRoute } from './auth/ProtectedRoute';
 import Navigation from './components/Navigation';
 
 const Home = lazy(() => import('./pages/Home'));
+const Login = lazy(() => import('./pages/Login'));
+const Signup = lazy(() => import('./pages/Signup'));
 const Lessons = lazy(() => import('./pages/Lessons'));
 const AITutor = lazy(() => import('./pages/AITutor'));
 const GrammarTools = lazy(() => import('./pages/GrammarTools'));
@@ -24,47 +28,203 @@ const CommonWordsLesson = lazy(() => import('./pages/CommonWordsLesson'));
 const SubjectPronounsLesson = lazy(() => import('./pages/SubjectPronounsLesson'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
+function AppContent() {
+  const { user } = useAuth();
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+      <Navigation />
+      <Suspense
+        fallback={(
+          <div className="flex min-h-[50vh] items-center justify-center px-4">
+            <div className="flex items-center gap-3 rounded-2xl border border-indigo-100 bg-white/80 px-4 py-3 shadow-sm dark:border-indigo-900/50 dark:bg-gray-900/70">
+              <span className="h-3 w-3 animate-ping rounded-full bg-indigo-500" aria-hidden />
+              <span className="text-sm font-semibold text-gray-700 dark:text-gray-200">Loading Lexora...</span>
+            </div>
+          </div>
+        )}
+      >
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Home />} />
+          
+          {/* Auth Routes - Redirect to home if already logged in */}
+          <Route 
+            path="/login" 
+            element={user ? <Navigate to="/profile" replace /> : <Login />} 
+          />
+          <Route 
+            path="/signup" 
+            element={user ? <Navigate to="/profile" replace /> : <Signup />} 
+          />
+
+          {/* Protected Routes */}
+          <Route 
+            path="/lessons" 
+            element={
+              <ProtectedRoute>
+                <Lessons />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/lessons/basic-vocab" 
+            element={
+              <ProtectedRoute>
+                <BasicVocab />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/lessons/common-phrases" 
+            element={
+              <ProtectedRoute>
+                <CommonPhrases />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/lessons/common-words" 
+            element={
+              <ProtectedRoute>
+                <CommonWordsLesson />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/lessons/subject-pronouns" 
+            element={
+              <ProtectedRoute>
+                <SubjectPronounsLesson />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/lessons/verb-conjugation" 
+            element={
+              <ProtectedRoute>
+                <VerbConjugation />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/lessons/advanced-grammar" 
+            element={
+              <ProtectedRoute>
+                <AdvancedGrammar />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/ai-tutor" 
+            element={
+              <ProtectedRoute>
+                <AITutor />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/grammar-tools" 
+            element={
+              <ProtectedRoute>
+                <GrammarTools />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/grammar/checker" 
+            element={
+              <ProtectedRoute>
+                <GrammarChecker />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/grammar/vocab-quiz" 
+            element={
+              <ProtectedRoute>
+                <VocabQuiz />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/profile" 
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/verbs-tenses" 
+            element={
+              <ProtectedRoute>
+                <VerbsTenses />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/grammar/sentence-builder" 
+            element={
+              <ProtectedRoute>
+                <SentenceBuilder />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/sentence-builder" 
+            element={
+              <ProtectedRoute>
+                <SentenceBuilder />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/conjunctions" 
+            element={
+              <ProtectedRoute>
+                <Conjunctions />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/basics/alphabet-numbers" 
+            element={
+              <ProtectedRoute>
+                <AlphabetNumbers />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/roleplay" 
+            element={
+              <ProtectedRoute>
+                <RolePlay />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/daily-conversation" 
+            element={
+              <ProtectedRoute>
+                <DailyConversation />
+              </ProtectedRoute>
+            } 
+          />
+
+          {/* Catch-all for 404 */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
+    </div>
+  );
+}
+
 function App() {
   return (
     <DarkModeProvider>
       <Router>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
-          <Navigation />
-          <Suspense
-            fallback={(
-              <div className="flex min-h-[50vh] items-center justify-center px-4">
-                <div className="flex items-center gap-3 rounded-2xl border border-indigo-100 bg-white/80 px-4 py-3 shadow-sm dark:border-indigo-900/50 dark:bg-gray-900/70">
-                  <span className="h-3 w-3 animate-ping rounded-full bg-indigo-500" aria-hidden />
-                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-200">Loading Lexora...</span>
-                </div>
-              </div>
-            )}
-          >
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/lessons" element={<Lessons />} />
-              <Route path="/lessons/basic-vocab" element={<BasicVocab />} />
-              <Route path="/lessons/common-phrases" element={<CommonPhrases />} />
-              <Route path="/lessons/common-words" element={<CommonWordsLesson />} />
-              <Route path="/lessons/subject-pronouns" element={<SubjectPronounsLesson />} />
-              <Route path="/lessons/verb-conjugation" element={<VerbConjugation />} />
-              <Route path="/lessons/advanced-grammar" element={<AdvancedGrammar />} />
-              <Route path="/ai-tutor" element={<AITutor />} />
-              <Route path="/grammar-tools" element={<GrammarTools />} />
-              <Route path="/grammar/checker" element={<GrammarChecker />} />
-              <Route path="/grammar/vocab-quiz" element={<VocabQuiz />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/verbs-tenses" element={<VerbsTenses />} />
-              <Route path="/grammar/sentence-builder" element={<SentenceBuilder />} />
-              <Route path="/sentence-builder" element={<SentenceBuilder />} />
-              <Route path="/conjunctions" element={<Conjunctions />} />
-              <Route path="/basics/alphabet-numbers" element={<AlphabetNumbers />} />
-              <Route path="/roleplay" element={<RolePlay />} />
-              <Route path="/daily-conversation" element={<DailyConversation />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </div>
+        <AppContent />
       </Router>
     </DarkModeProvider>
   );
