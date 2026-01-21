@@ -9,6 +9,7 @@ import { useLanguageStore } from '../stores/languageStore';
 import { gerundData } from '../data/gerundData';
 import { countryExamples } from '../data/countryExamples';
 import { translations } from '../data/translationData';
+import { devLog } from '../utils/devLog';
 
 function VerbConjugation() {
   const [completed, setCompleted] = useState(false);
@@ -68,7 +69,7 @@ function VerbConjugation() {
   const handleConjugateVerb = () => {
     if (newVerb.trim()) {
       alert(`Feature coming soon! You want to conjugate: "${newVerb}"\n\nThis will show conjugation tables for your chosen verb.`);
-      console.log('Verb to conjugate:', newVerb);
+      devLog('Verb to conjugate:', newVerb);
     } else {
       alert('Please enter a verb to conjugate.');
     }

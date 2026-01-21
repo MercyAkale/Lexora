@@ -20,6 +20,7 @@ import GrammarChecker from './pages/GrammarChecker';
 import VocabQuiz from './pages/VocabQuiz';
 import CommonWordsLesson from './pages/CommonWordsLesson';
 import SubjectPronounsLesson from './pages/SubjectPronounsLesson';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
             <Route path="/basics/alphabet-numbers" element={<AlphabetNumbers />} />
             <Route path="/roleplay" element={<RolePlay />} />
             <Route path="/daily-conversation" element={<DailyConversation />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
       </Router>

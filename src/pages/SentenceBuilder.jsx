@@ -7,6 +7,7 @@ import Tooltip from '../components/ui/Tooltip';
 import { useLanguageStore } from '../stores/languageStore';
 import { gerundData } from '../data/gerundData';
 import { countryExamples } from '../data/countryExamples';
+import { devLog } from '../utils/devLog';
 
 function SentenceBuilder() {
   const [selectedWords, setSelectedWords] = useState([]);
@@ -431,7 +432,7 @@ function SentenceBuilder() {
     if (selectedWords.length > 0) {
       const native = selectedWords.map(w => w[Object.keys(w).find(k => k !== 'english' && k !== 'example')] || w.word).join(' ');
       const english = selectedWords.map(w => w.english).join(' ');
-      console.log('Saving sentence:', { native, english });
+      devLog('Saving sentence:', { native, english });
       alert(`Sentence saved!\n\n${selectedLanguage.name}: ${native}\nEnglish: ${english}`);
     }
   };
