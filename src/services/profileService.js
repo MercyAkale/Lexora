@@ -14,7 +14,7 @@ export async function getUserProfile(userId) {
     const { data, error } = await supabase
       .from('user_profiles')
       .select('*')
-      .eq('user_id', userId)
+      .eq('id', userId)
       .single();
 
     if (error) {
@@ -105,7 +105,7 @@ export async function updateUserProfile(userId, updates) {
     const { data, error } = await supabase
       .from('user_profiles')
       .update(updateData)
-      .eq('user_id', userId)
+      .eq('id', userId)
       .select()
       .single();
 
@@ -172,7 +172,7 @@ export async function updateStreak(userId) {
         last_active_date: today,
         updated_at: new Date().toISOString(),
       })
-      .eq('user_id', userId)
+      .eq('id', userId)
       .select()
       .single();
 
@@ -218,7 +218,7 @@ export async function updateStudyTime(userId, minutes) {
         total_study_time: newTotalStudyTime,
         updated_at: new Date().toISOString(),
       })
-      .eq('user_id', userId)
+      .eq('id', userId)
       .select()
       .single();
 

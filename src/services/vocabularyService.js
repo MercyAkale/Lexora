@@ -141,9 +141,9 @@ export async function updateWordProgress(userId, wordId, isCorrect) {
 
     const now = new Date();
     let masteryLevel = existingProgress?.mastery_level || 0;
-    let correctCount = existingProgress?.correct_count || 0;
-    let incorrectCount = existingProgress?.incorrect_count || 0;
-    let reviewCount = existingProgress?.review_count || 0;
+    let correctCount = existingProgress?.times_correct || 0;
+    let incorrectCount = existingProgress?.intimes_correct || 0;
+    let reviewCount = existingProgress?.times_reviewed || 0;
 
     reviewCount += 1;
 
@@ -161,9 +161,9 @@ export async function updateWordProgress(userId, wordId, isCorrect) {
       user_id: userId,
       word_id: wordId,
       mastery_level: masteryLevel,
-      correct_count: correctCount,
-      incorrect_count: incorrectCount,
-      review_count: reviewCount,
+      times_correct: correctCount,
+      intimes_correct: incorrectCount,
+      times_reviewed: reviewCount,
       last_reviewed: now.toISOString(),
       next_review_date: nextReviewDate.toISOString(),
       updated_at: now.toISOString(),
@@ -255,9 +255,9 @@ export async function addWordToLearning(userId, wordId) {
       user_id: userId,
       word_id: wordId,
       mastery_level: 0,
-      correct_count: 0,
-      incorrect_count: 0,
-      review_count: 0,
+      times_correct: 0,
+      intimes_correct: 0,
+      times_reviewed: 0,
       last_reviewed: null,
       next_review_date: nextReview.toISOString(),
       created_at: now.toISOString(),
@@ -315,11 +315,11 @@ export async function getVocabularyStats(userId, languageCode = null) {
       mastered_words: progressData.filter(p => p.mastery_level >= 6).length,
       learning_words: progressData.filter(p => p.mastery_level > 0 && p.mastery_level < 6).length,
       new_words: progressData.filter(p => p.mastery_level === 0).length,
-      total_reviews: progressData.reduce((sum, p) => sum + (p.review_count || 0), 0),
+      total_reviews: progressData.reduce((sum, p) => sum + (p.times_reviewed || 0), 0),
       accuracy: progressData.length > 0
         ? Math.round(
-            (progressData.reduce((sum, p) => sum + (p.correct_count || 0), 0) /
-              progressData.reduce((sum, p) => sum + (p.review_count || 0), 1)) * 100
+            (progressData.reduce((sum, p) => sum + (p.times_correct || 0), 0) /
+              progressData.reduce((sum, p) => sum + (p.times_reviewed || 0), 1)) * 100
           )
         : 0,
     };

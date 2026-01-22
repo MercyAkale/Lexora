@@ -103,14 +103,14 @@ async function awardAchievement(userId, achievementKey) {
 
     if (achievement.xp_reward > 0) {
       const { data: profile } = await supabase
-        .from('profiles')
+        .from('user_profiles')
         .select('total_xp')
         .eq('user_id', userId)
         .single();
 
       if (profile) {
         await supabase
-          .from('profiles')
+          .from('user_profiles')
           .update({
             total_xp: (profile.total_xp || 0) + achievement.xp_reward,
             updated_at: new Date().toISOString(),
@@ -140,7 +140,7 @@ export async function checkAndAwardAchievements(userId) {
     const newAchievements = [];
 
     const { data: profile } = await supabase
-      .from('profiles')
+      .from('user_profiles')
       .select('*')
       .eq('user_id', userId)
       .single();
@@ -279,7 +279,7 @@ export async function getAchievementProgress(userId, achievementKey) {
     }
 
     const { data: profile } = await supabase
-      .from('profiles')
+      .from('user_profiles')
       .select('*')
       .eq('user_id', userId)
       .single();
