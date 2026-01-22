@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import { AnimatePresence, motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
 import { useLanguageStore } from '../stores/languageStore';
 import { usePersonaStore } from '../stores/personaStore';
 import Accordion from '../components/ui/Accordion';
@@ -60,22 +60,23 @@ function DailyConversation() {
   // Memoize random selections to avoid calling during render
   const randomCountryExample = useMemo(() => {
     if (currentCountryExamples.length === 0) return null;
+    // eslint-disable-next-line react-hooks/purity
     const randomIndex = Math.floor(Math.random() * currentCountryExamples.length);
     return currentCountryExamples[randomIndex];
-  }, [selectedLanguage.code]);
+  }, [currentCountryExamples]);
 
-  // Get random country example (for responses)
-  const getRandomCountryExample = () => {
+  // Get random country example (for responses) - wrapped in useCallback
+  const getRandomCountryExample = useCallback(() => {
     const randomIndex = Math.floor(Math.random() * currentCountryExamples.length);
     return currentCountryExamples[randomIndex];
-  };
+  }, [currentCountryExamples]);
 
-  // Get gerund variation (for responses)
-  const getGerundVariation = () => {
+  // Get gerund variation (for responses) - wrapped in useCallback
+  const getGerundVariation = useCallback(() => {
     const examples = currentGerundData.intermediate.examples;
     const randomIndex = Math.floor(Math.random() * examples.length);
     return examples[randomIndex];
-  };
+  }, [currentGerundData]);
 
   // Check practice input
   const checkPracticeInput = () => {
@@ -130,7 +131,7 @@ function DailyConversation() {
     scrollToBottom();
   }, [messages, isTyping]);
 
-  const generateResponse = (userMessage) => {
+  const generateResponse = useCallback((userMessage) => {
     const lowerMessage = userMessage.toLowerCase();
     
     const responses = {
@@ -170,7 +171,6 @@ function DailyConversation() {
     // Country name responses
     if (lowerMessage.includes('country') || lowerMessage.includes('travel') || lowerMessage.includes('visit')) {
       const countryExample = getRandomCountryExample();
-      const langKey = Object.keys(countryExample).find(k => k === 'sentence');
       return {
         text: countryExample.sentence,
         translation: countryExample.translation,
@@ -196,7 +196,7 @@ function DailyConversation() {
     }
 
     return randomResponse;
-  };
+  }, [getGerundVariation, getRandomCountryExample, currentGerundData, selectedLanguage.name, selectedPersona.id]);
 
   const handleSend = (messageText = null) => {
     const textToSend = messageText || input.trim();

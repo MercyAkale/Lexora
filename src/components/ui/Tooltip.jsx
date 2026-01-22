@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
 
 function Tooltip({ children, content, position = 'top' }) {
   const [isVisible, setIsVisible] = useState(false);
