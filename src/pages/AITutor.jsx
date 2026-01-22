@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguageStore } from '../stores/languageStore';
@@ -7,25 +7,38 @@ import { usePersonaStore, personas } from '../stores/personaStore';
 function AITutor() {
   const { selectedLanguage } = useLanguageStore();
   const { selectedPersona, setPersona } = usePersonaStore();
-  const [messages, setMessages] = useState([]);
+  const prevPersonaRef = useRef(selectedPersona.id);
+  
+  // Initialize messages with persona greeting - compute initial value based on persona
+  const getInitialMessages = () => [{
+    id: 1,
+    text: selectedPersona.greeting,
+    translation: selectedPersona.greetingEn,
+    isBot: true,
+    persona: selectedPersona.name,
+  }];
+  
+  const [messages, setMessages] = useState(getInitialMessages);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [messageIdCounter, setMessageIdCounter] = useState(2);
   const [showPersonaDropdown, setShowPersonaDropdown] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Initialize with persona greeting
-  useEffect(() => {
-    setMessages([
-      {
+  // Reset messages when persona changes (useLayoutEffect for sync update before render)
+  useLayoutEffect(() => {
+    if (prevPersonaRef.current !== selectedPersona.id) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setMessages([{
         id: 1,
         text: selectedPersona.greeting,
         translation: selectedPersona.greetingEn,
         isBot: true,
         persona: selectedPersona.name,
-      },
-    ]);
-    setMessageIdCounter(2);
+      }]);
+      setMessageIdCounter(2);
+      prevPersonaRef.current = selectedPersona.id;
+    }
   }, [selectedPersona]);
 
   // Dynamic suggested replies based on conversation

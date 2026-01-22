@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { AnimatePresence, motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
 import { useLanguageStore } from '../stores/languageStore';
 // eslint-disable-next-line no-unused-vars
 import { gerundData } from '../data/gerundData';
@@ -151,7 +151,7 @@ function RolePlay() {
     ]);
   };
 
-  const generateResponse = (_userMessage) => {
+  const generateResponse = useCallback((_userMessage) => { // eslint-disable-line no-unused-vars
     const langCode = selectedLanguage.code || 'es';
     const countries = countryExamples[langCode] || countryExamples.es;
     const randomCountry = countries[Math.floor(Math.random() * countries.length)];
@@ -311,7 +311,7 @@ function RolePlay() {
       gerundHighlight: randomResponse.gerundHighlight,
       countryTip: randomResponse.countryTip,
     };
-  };
+  }, [selectedLanguage.code, selectedScenario]);
 
   const handleSend = (messageText = null) => {
     const textToSend = messageText || input.trim();

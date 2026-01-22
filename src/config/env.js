@@ -12,7 +12,6 @@ const validateEnv = () => {
   }
 
   if (appEnv === 'production' && !apiBaseUrl) {
-    // eslint-disable-next-line no-console
     console.warn('[Lexora] VITE_API_BASE_URL is not set; API calls may fail.');
   }
 };

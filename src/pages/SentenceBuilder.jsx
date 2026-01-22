@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -398,8 +398,9 @@ function SentenceBuilder() {
   };
 
   // Get current language data
-  const currentData = wordBlocks[langCode] || wordBlocks.es;
-  const sentenceStarters = currentData.sentenceStarters || [];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const currentData = useMemo(() => wordBlocks[langCode] || wordBlocks.es, [langCode]);
+  const sentenceStarters = useMemo(() => currentData.sentenceStarters || [], [currentData]);
   const countries = countryExamples[langCode] || countryExamples.es;
 
   const addWord = (word, isGerund = false) => {
@@ -418,7 +419,7 @@ function SentenceBuilder() {
     setSelectedWords([]);
   };
 
-  const generateRandomSentence = () => {
+  const generateRandomSentence = useCallback(() => {
     const starter = sentenceStarters[Math.floor(Math.random() * sentenceStarters.length)];
     const subject = currentData.subjects[Math.floor(Math.random() * currentData.subjects.length)];
     const verb = currentData.verbs[Math.floor(Math.random() * currentData.verbs.length)];
@@ -426,7 +427,7 @@ function SentenceBuilder() {
     const conjunction = currentData.conjunctions[Math.floor(Math.random() * currentData.conjunctions.length)];
     
     setSelectedWords([starter, { word: subject.word, english: subject.english }, { word: verb.word, english: verb.english }, { word: object.word, english: object.english }, { word: conjunction.word, english: conjunction.english }]);
-  };
+  }, [sentenceStarters, currentData]);
 
   const saveSentence = () => {
     if (selectedWords.length > 0) {
