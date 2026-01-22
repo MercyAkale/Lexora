@@ -56,7 +56,7 @@ export async function getLessonProgress(userId, lessonKey) {
     }
 
     const { data, error } = await supabase
-      .from('lesson_progress')
+      .from('user_lesson_progress')
       .select('*')
       .eq('user_id', userId)
       .eq('lesson_key', lessonKey)
@@ -109,7 +109,7 @@ export async function updateLessonProgress(userId, lessonKey, progressData) {
 
     if (existingProgress) {
       const { data, error } = await supabase
-        .from('lesson_progress')
+        .from('user_lesson_progress')
         .update(updateData)
         .eq('user_id', userId)
         .eq('lesson_key', lessonKey)
@@ -122,7 +122,7 @@ export async function updateLessonProgress(userId, lessonKey, progressData) {
       updateData.created_at = new Date().toISOString();
 
       const { data, error } = await supabase
-        .from('lesson_progress')
+        .from('user_lesson_progress')
         .insert(updateData)
         .select()
         .single();
@@ -173,7 +173,7 @@ export async function completeLesson(userId, lessonKey, score) {
       progressData.best_score = Math.max(score, existingProgress.best_score || 0);
 
       const { data, error } = await supabase
-        .from('lesson_progress')
+        .from('user_lesson_progress')
         .update(progressData)
         .eq('user_id', userId)
         .eq('lesson_key', lessonKey)
@@ -188,7 +188,7 @@ export async function completeLesson(userId, lessonKey, score) {
       progressData.best_score = score;
 
       const { data, error } = await supabase
-        .from('lesson_progress')
+        .from('user_lesson_progress')
         .insert(progressData)
         .select()
         .single();
@@ -214,7 +214,7 @@ export async function getUserLessonStats(userId) {
     }
 
     const { data: progressData, error } = await supabase
-      .from('lesson_progress')
+      .from('user_lesson_progress')
       .select('*')
       .eq('user_id', userId);
 

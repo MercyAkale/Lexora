@@ -12,7 +12,7 @@ export async function getUserProfile(userId) {
     }
 
     const { data, error } = await supabase
-      .from('profiles')
+      .from('user_profiles')
       .select('*')
       .eq('user_id', userId)
       .single();
@@ -67,7 +67,7 @@ export async function createUserProfile(userId, profileData = {}) {
     };
 
     const { data, error } = await supabase
-      .from('profiles')
+      .from('user_profiles')
       .insert(profile)
       .select()
       .single();
@@ -103,7 +103,7 @@ export async function updateUserProfile(userId, updates) {
     };
 
     const { data, error } = await supabase
-      .from('profiles')
+      .from('user_profiles')
       .update(updateData)
       .eq('user_id', userId)
       .select()
@@ -165,7 +165,7 @@ export async function updateStreak(userId) {
     const longestStreak = Math.max(newStreak, profile.longest_streak);
 
     const { data, error } = await supabase
-      .from('profiles')
+      .from('user_profiles')
       .update({
         current_streak: newStreak,
         longest_streak: longestStreak,
@@ -213,7 +213,7 @@ export async function updateStudyTime(userId, minutes) {
     const newTotalStudyTime = (profile.total_study_time || 0) + minutes;
 
     const { data, error } = await supabase
-      .from('profiles')
+      .from('user_profiles')
       .update({
         total_study_time: newTotalStudyTime,
         updated_at: new Date().toISOString(),

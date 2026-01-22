@@ -150,12 +150,12 @@ export async function checkAndAwardAchievements(userId) {
     }
 
     const { data: lessonProgress } = await supabase
-      .from('lesson_progress')
+      .from('user_lesson_progress')
       .select('*')
       .eq('user_id', userId);
 
     const { data: vocabularyProgress } = await supabase
-      .from('vocabulary_progress')
+      .from('user_vocabulary_progress')
       .select('*')
       .eq('user_id', userId);
 
@@ -298,7 +298,7 @@ export async function getAchievementProgress(userId, achievementKey) {
         break;
       case 'lessons': {
         const { data: lessonProgress } = await supabase
-          .from('lesson_progress')
+          .from('user_lesson_progress')
           .select('*')
           .eq('user_id', userId)
           .eq('is_completed', true);
@@ -307,7 +307,7 @@ export async function getAchievementProgress(userId, achievementKey) {
       }
       case 'vocabulary': {
         const { data: vocabularyProgress } = await supabase
-          .from('vocabulary_progress')
+          .from('user_vocabulary_progress')
           .select('*')
           .eq('user_id', userId)
           .gte('mastery_level', 6);
@@ -316,7 +316,7 @@ export async function getAchievementProgress(userId, achievementKey) {
       }
       case 'perfect_score': {
         const { data: lessonProgress } = await supabase
-          .from('lesson_progress')
+          .from('user_lesson_progress')
           .select('*')
           .eq('user_id', userId)
           .eq('score', 100);

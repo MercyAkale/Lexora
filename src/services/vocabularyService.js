@@ -13,7 +13,7 @@ export async function getVocabularyWords(languageCode, category = null) {
     }
 
     let query = supabase
-      .from('vocabulary')
+      .from('vocabulary_words')
       .select('*')
       .eq('language_code', languageCode)
       .order('difficulty_level', { ascending: true })
@@ -47,7 +47,7 @@ export async function getUserVocabularyProgress(userId, languageCode) {
     }
 
     const { data, error } = await supabase
-      .from('vocabulary_progress')
+      .from('user_vocabulary_progress')
       .select(`
         *,
         vocabulary (
@@ -86,7 +86,7 @@ export async function getWordsForReview(userId, limit = 20) {
     const now = new Date().toISOString();
 
     const { data, error } = await supabase
-      .from('vocabulary_progress')
+      .from('user_vocabulary_progress')
       .select(`
         *,
         vocabulary (
@@ -129,7 +129,7 @@ export async function updateWordProgress(userId, wordId, isCorrect) {
     }
 
     const { data: existingProgress, error: fetchError } = await supabase
-      .from('vocabulary_progress')
+      .from('user_vocabulary_progress')
       .select('*')
       .eq('user_id', userId)
       .eq('word_id', wordId)
@@ -171,7 +171,7 @@ export async function updateWordProgress(userId, wordId, isCorrect) {
 
     if (existingProgress) {
       const { data, error } = await supabase
-        .from('vocabulary_progress')
+        .from('user_vocabulary_progress')
         .update(progressData)
         .eq('user_id', userId)
         .eq('word_id', wordId)
@@ -184,7 +184,7 @@ export async function updateWordProgress(userId, wordId, isCorrect) {
       progressData.created_at = now.toISOString();
 
       const { data, error } = await supabase
-        .from('vocabulary_progress')
+        .from('user_vocabulary_progress')
         .insert(progressData)
         .select()
         .single();
@@ -238,7 +238,7 @@ export async function addWordToLearning(userId, wordId) {
     }
 
     const { data: existingProgress } = await supabase
-      .from('vocabulary_progress')
+      .from('user_vocabulary_progress')
       .select('*')
       .eq('user_id', userId)
       .eq('word_id', wordId)
@@ -265,7 +265,7 @@ export async function addWordToLearning(userId, wordId) {
     };
 
     const { data, error } = await supabase
-      .from('vocabulary_progress')
+      .from('user_vocabulary_progress')
       .insert(progressData)
       .select()
       .single();
@@ -292,7 +292,7 @@ export async function getVocabularyStats(userId, languageCode = null) {
     }
 
     let query = supabase
-      .from('vocabulary_progress')
+      .from('user_vocabulary_progress')
       .select(`
         *,
         vocabulary (

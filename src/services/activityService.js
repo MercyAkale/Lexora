@@ -48,7 +48,7 @@ export async function logActivity(userId, activityType, activityData = {}) {
     };
 
     const { data, error } = await supabase
-      .from('activities')
+      .from('user_activities')
       .insert(activity)
       .select()
       .single();
@@ -79,7 +79,7 @@ export async function getUserActivities(userId, limit = 50) {
     }
 
     const { data, error } = await supabase
-      .from('activities')
+      .from('user_activities')
       .select('*')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
@@ -114,7 +114,7 @@ export async function getRecentActivities(userId, days = 7) {
     cutoffDate.setDate(cutoffDate.getDate() - days);
 
     const { data, error } = await supabase
-      .from('activities')
+      .from('user_activities')
       .select('*')
       .eq('user_id', userId)
       .gte('created_at', cutoffDate.toISOString())
@@ -253,7 +253,7 @@ export async function getActivitiesByType(userId, activityType, limit = 50) {
     }
 
     const { data, error } = await supabase
-      .from('activities')
+      .from('user_activities')
       .select('*')
       .eq('user_id', userId)
       .eq('activity_type', activityType)
@@ -285,7 +285,7 @@ export async function cleanupOldActivities(userId, daysToKeep = 90) {
     cutoffDate.setDate(cutoffDate.getDate() - daysToKeep);
 
     const { data, error } = await supabase
-      .from('activities')
+      .from('user_activities')
       .delete()
       .eq('user_id', userId)
       .lt('created_at', cutoffDate.toISOString())
