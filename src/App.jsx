@@ -1,5 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import { DarkModeProvider } from './contexts/DarkModeContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { useAuth } from './auth/useAuth';
@@ -228,6 +229,7 @@ function App() {
         <Router>
           <AppContent />
         </Router>
+        <Analytics />
       </ToastProvider>
     </DarkModeProvider>
   );
